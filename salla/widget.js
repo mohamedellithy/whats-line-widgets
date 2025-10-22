@@ -54,10 +54,8 @@ async function render_whatsapp() {
         PhoneHiddenInput.id    = "wa-phone";
         PhoneHiddenInput.value = "{{app.custom_merchant_phone}}";
         await div.appendChild(PhoneHiddenInput);
-    
         // Append the <a> element to the document body or any desired parent element
         await document.body.appendChild(div);
-    
         // here call event api
         await link.addEventListener("click", async (e) => {
             document.getElementById('wa-popup').style.display = 'block';
