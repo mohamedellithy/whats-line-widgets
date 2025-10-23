@@ -1,14 +1,14 @@
 
 async function render_whatsapp() {
-    if("{{app.wahtsapp_icon_status}}" == true){
+    if(whatsappln_icon_status == true){
         console.log("WhatsAppLn Widget v1.0.0");
         // Create the <a> element
         const link = document.createElement("a")
         link.href = "#";
         link.target = "";
         link.id = "whatsappIcon";
-        link.style.width    = "{{app.whatsapp_icon_width}}" || "50px";
-        link.style.height   = "{{app.whatsapp_icon_height}}" || "50px";
+        link.style.width    = whatsappln_icon_width || "50px";
+        link.style.height   = whatsappln_icon_height || "50px";
         link.style.display = "block";
     
         // Create the <div> element
@@ -16,10 +16,10 @@ async function render_whatsapp() {
         div.className = "whatsapp-button";
         div.title = "تواصل معنا واتساب";
         div.style.position = "fixed";
-        div.style.left     = "{{app.whatsapp_icon_left}}";
-        div.style.right    = "{{app.whatsapp_icon_right}}";
-        div.style.bottom   = "{{app.whatsapp_icon_bottom}}";
-        div.style.top      = "{{app.whatsapp_icon_top}}";
+        div.style.left     = whatsappln_icon_left;
+        div.style.right    = whatsappln_icon_right;
+        div.style.bottom   = whatsappln_icon_bottom;
+        div.style.top      = whatsappln_icon_top;
         div.style.zIndex   = "1000000000000";
         div.style.cursor   = "pointer";
     
@@ -28,7 +28,7 @@ async function render_whatsapp() {
         image.className = "whatsapp-image";
         image.src = "https://line.sa/wp-content/uploads/2024/04/whatsapp.png";
         image.alt = "WhatsApp Image";
-        image.style.width    = "{{app.whatsapp_icon_width}}" || "95%";
+        image.style.width    = whatsappln_icon_width || "95%";
     
         // Append the <img> element to the <div> element
         link.appendChild(image);
@@ -52,14 +52,14 @@ async function render_whatsapp() {
         const PhoneHiddenInput = document.createElement('input');
         PhoneHiddenInput.type  = "hidden";
         PhoneHiddenInput.id    = "wa-phone";
-        PhoneHiddenInput.value = "{{app.custom_merchant_phone}}";
+        PhoneHiddenInput.value = whatsappln_custom_merchant_phone;
         await div.appendChild(PhoneHiddenInput);
         // Append the <a> element to the document body or any desired parent element
         await document.body.appendChild(div);
         // here call event api
         await link.addEventListener("click", async (e) => {
             document.getElementById('wa-popup').style.display = 'block';
-            let apiUrl = "https://whats.line.sa/api/v1/whatsapp-icons/salla/{{store.id}}";
+            let apiUrl = "https://whats.line.sa/api/v1/whatsapp-icons/salla/"+whatsappln_store_id;
             await fetch(apiUrl, {
                 method: 'GET', // or 'POST', 'PUT', etc.
                 mode: 'cors',
