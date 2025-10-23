@@ -82,7 +82,9 @@ async function render_whatsapp() {
     }
 }
 
+// here
 render_whatsapp();
+// here 
 
 // close
 document.getElementById('wa-close').addEventListener("click", (e) => {
