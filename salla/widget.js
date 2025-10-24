@@ -18,7 +18,7 @@ async function render_whatsapp() {
         div.style.position = "fixed";
         div.style.left     = whatsappln_icon_left;
         div.style.right    = whatsappln_icon_right;
-        div.style.bottom   = whatsappln_icon_botrtom;
+        div.style.bottom   = whatsappln_icon_bottom;
         div.style.top      = whatsappln_icon_top;
         div.style.zIndex   = "1000000000000";
         div.style.cursor   = "pointer";
@@ -52,7 +52,7 @@ async function render_whatsapp() {
         const PhoneHiddenInput = document.createElement('input');
         PhoneHiddenInput.type  = "hidden";
         PhoneHiddenInput.id    = "wa-phone";
-        PhoneHiddenInput.value = whatsappln_custom_merchant_phone;
+        PhoneHiddenInput.value = whatsappln_custom_merchant_phone || null;
         await div.appendChild(PhoneHiddenInput);
         // Append the <a> element to the document body or any desired parent element
         await document.body.appendChild(div);
@@ -71,36 +71,37 @@ async function render_whatsapp() {
                     throw new Error('Request failed with status code ' + response.status);
                 }
                 return response.json(); // or response.text() for non-JSON responses
-            }).then(data => {
+            }).then(async (data) => {
                 // Process the response data
                 console.log(data);
                 if(data?.whatsapp_icon){
                     document.getElementById('wa-popup').innerHTML = data?.whatsapp_icon;
                 }
+
+                // close
+                let WaCloss = document.getElementById('wa-close');
+                await WaCloss.addEventListener("click", (e) => {
+                    document.getElementById('wa-popup').style.display = 'none';
+                });
+
+                // wa-send
+                let WaSend = document.getElementById('wa-send');
+                await WaSend.addEventListener("click", (e) => {
+                    let message = document.getElementById('wa-message').value.trim();
+                    if(!message) {
+                        alert('يرجى كتابة رسالة لإرسالها عبر واتساب');
+                        return;
+                    }
+
+                    var phone = whatsappln_custom_merchant_phone || whatsappln_user_phone;
+                    var link  = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(message);
+                    window.open(link, '_blank');
+                    document.getElementById('wa-message').value = '';
+                    document.getElementById('wa-popup').style.display = 'none';
+                });
             });
         });
         
-        let WaCloss = document.getElementById('wa-close');
-        // close
-        await WaCloss.addEventListener("click", (e) => {
-            document.getElementById('wa-popup').style.display = 'none';
-        });
-
-        let WaSend = document.getElementById('wa-send');
-        // wa-send
-        await WaSend.addEventListener("click", (e) => {
-            let message = document.getElementById('wa-message').value.trim();
-            if(!message) {
-                alert('يرجى كتابة رسالة لإرسالها عبر واتساب');
-                return;
-            }
-    
-            var phone = document.getElementById('wa-phone').value;
-            var link  = 'https://wa.me/' + phone + '?text=' + encodeURIComponent(msg);
-            window.open(link, '_blank');
-            document.getElementById('wa-message').value = '';
-            document.getElementById('wa-popup').style.display = 'none';
-        });
     }
 }
 
