@@ -1,7 +1,7 @@
 
 async function render_whatsapp() {
     if(whatsappln_icon_status == true){
-        console.log("WhatsAppLn Widget v1.0.4");
+        console.log("WhatsAppLn Widget v1.0.6");
         // Create the <a> element
         const link = document.createElement("a")
         link.href = "#";
