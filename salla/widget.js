@@ -18,7 +18,7 @@ async function render_whatsapp() {
         div.style.position = "fixed";
         div.style.left     = whatsappln_icon_left;
         div.style.right    = whatsappln_icon_right;
-        div.style.bottom   = whatsappln_icon_bottom;
+        div.style.bottom   = whatsappln_icon_botrtom;
         div.style.top      = whatsappln_icon_top;
         div.style.zIndex   = "1000000000000";
         div.style.cursor   = "pointer";
@@ -80,13 +80,15 @@ async function render_whatsapp() {
             });
         });
         
+        let WaCloss = document.getElementById('wa-close');
         // close
-        await document.getElementById('wa-close').addEventListener("click", (e) => {
+        await WaCloss.addEventListener("click", (e) => {
             document.getElementById('wa-popup').style.display = 'none';
         });
-    
+
+        let WaSend = document.getElementById('wa-send');
         // wa-send
-        await document.getElementById('wa-send').addEventListener("click", (e) => {
+        await WaSend.addEventListener("click", (e) => {
             let message = document.getElementById('wa-message').value.trim();
             if(!message) {
                 alert('يرجى كتابة رسالة لإرسالها عبر واتساب');
