@@ -1,5 +1,5 @@
 
-async function render_whatsapp() {
+async function render_whatsapp_icon() {
     if(whatsappln_icon_status == true){
         console.log("WhatsAppLn Widget v1.0.7");
         // Create the <a> element
@@ -106,6 +106,17 @@ async function render_whatsapp() {
 }
 
 
-// here all
-render_whatsapp();
-// here all
+// render_whatsapp_icon
+render_whatsapp_icon();
+// render_whatsapp_icon
+
+
+
+async function render_whatsapp_remember_me_on_stock(){
+    alert("hi");
+}
+
+
+// render_whatsapp_remember_me_on_stock
+render_whatsapp_remember_me_on_stock();
+// render_whatsapp_remember_me_on_stock
