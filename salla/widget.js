@@ -101,19 +101,193 @@ async function render_whatsapp_icon() {
                 });
             });
         });
-        
     }
 }
-
 
 // render_whatsapp_icon
 render_whatsapp_icon();
 // render_whatsapp_icon
 
-
-
+/**
+ *
+ */
 async function render_whatsapp_remember_me_on_stock(){
-    alert("hi");
+    let ProductForm = document.querySelector('form.product-form');
+
+    // --- 2. Create container ---
+    const WsContainer = document.createElement('div');
+    WsContainer.className = 'ws-available-product-container';
+
+    const WsHeading = document.createElement('h2');
+    WsHeading.textContent = 'أعلمني عندما يكون المنتج متوفرًا في المخزون';
+    WsContainer.appendChild(WsHeading);
+
+    // --- 3. Create form ---
+    const Wsform = document.createElement('form');
+
+    // Checkbox to allow WhatsApp
+    const WsContainerCheckbox     = document.createElement('div');
+    WsContainerCheckbox.className = "ws-container-checkbox";
+
+    // label checkbox
+    const whatsappCheckboxLabel   = document.createElement('label');
+
+    // checkbox
+    const whatsappCheckbox = document.createElement('input');
+    whatsappCheckbox.type = 'checkbox';
+    whatsappCheckboxLabel.appendChild(document.createTextNode('أبلغني عبر الواتساب'));
+    WsContainerCheckbox.appendChild(whatsappCheckbox);
+    WsContainerCheckbox.appendChild(whatsappCheckboxLabel);
+    
+  
+    // container whatsapp Section
+    const WsContainerSendInputs = document.createElement('div');
+    WsContainerSendInputs.className = "ws-container-send-inputs";
+
+    // WhatsApp input field
+    const whatsappInput = document.createElement('input');
+    whatsappInput.type = 'tel';
+    whatsappInput.placeholder = '966000000000';
+    whatsappInput.className = 'whatsapp-field';
+    WsContainerSendInputs.appendChild(whatsappInput);
+
+    // Submit button
+    const Wsbutton = document.createElement('button');
+    Wsbutton.type = 'submit';
+    Wsbutton.textContent = 'أعلمني';
+    if(whatsappCheckbox.checked){
+        Wsbutton.disabled      = true;
+        whatsappInput.disabled = true;
+    }
+    WsContainerSendInputs.appendChild(Wsbutton);
+
+    // Append elements to Wsform
+    Wsform.appendChild(WsContainerCheckbox);
+    Wsform.appendChild(WsContainerSendInputs);
+
+    // container all
+    WsContainer.appendChild(Wsform);
+
+    // Success message
+    const successMsg = document.createElement('div');
+    successMsg.className = 'success-msg';
+    successMsg.textContent = 'سيتم إعلامك عندما يكون المنتج متوفرًا في المخزون!';
+    WsContainer.appendChild(successMsg);
+
+    // final
+    if(ProductForm){
+        ProductForm?.insertAdjacentElement('afterend',WsContainer);
+    }
+
+    let product_id      = document.querySelector('form.product-form > input[name="id"]')?.value;
+    let savedWhatsAppProducts         = localStorage.getItem('notifyWhatsAppProducts') || [];
+    let savedWhatsAppProductsPhones   = localStorage.getItem('notifyWhatsAppProductsPhones') || [];
+
+    // --- 4. Show/hide WhatsApp input ---
+    whatsappCheckbox.addEventListener('change', async () => {
+        Wsbutton.disabled      = whatsappCheckbox.checked ? false : true;
+        whatsappInput.disabled = whatsappCheckbox.checked ? false : true;
+        whatsappInput.required = whatsappCheckbox.checked;
+        if(whatsappCheckbox.checked == false){
+            savedWhatsAppProducts.splice(savedWhatsAppProducts.indexOf(product_id),1);
+            savedWhatsAppProductsPhones.splice(savedWhatsAppProductsPhones.indexOf({
+                product_id : product_id,
+                phone      : whatsappInput.value.trim()
+            }),1);
+            
+            let apiUrl   = "https://whats.line.sa/api/v1/whatsapp-notify-stock-product/delete-salla/"+whatsappln_store_id;
+            await fetch(apiUrl, {
+                method: 'POST', // or 'POST', 'PUT', etc.
+                mode: 'cors',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    client_phone: whatsappInput?.value,
+                    product_id: product_id,
+                }),
+            });
+            whatsappInput.value = null;
+            localStorage.setItem('notifyWhatsAppProducts', JSON.stringify(savedWhatsAppProducts));
+            localStorage.setItem('notifyWhatsAppProductsPhones', JSON.stringify(savedWhatsAppProductsPhones));
+            successMsg.style.display = 'none';
+        }
+    });
+
+    // --- 4. Show/hide WhatsApp input ---
+    whatsappInput.addEventListener('blur', () => {
+        whatsappInput.value = cleanPhone(whatsappInput.value);
+        console.log(whatsappInput.value);
+    });
+
+    function cleanPhone(phone) {
+        return phone.replace(/[^\d]/g, '');
+    }
+
+    // --- 5. Load saved data ---
+    if(savedWhatsAppProducts && (typeof savedWhatsAppProducts == "string")){
+        savedWhatsAppProducts = JSON.parse(savedWhatsAppProducts);
+    }
+
+    if(savedWhatsAppProductsPhones && (typeof savedWhatsAppProductsPhones == "string")){
+        savedWhatsAppProductsPhones = JSON.parse(savedWhatsAppProductsPhones);
+    }
+
+    if(savedWhatsAppProducts?.indexOf(product_id) != -1) {
+        whatsappCheckbox.checked = true;
+        savedWhatsAppProductsPhones?.map((item) => {
+            if(item.product_id == product_id){
+                whatsappInput.value = item?.phone || null;
+            }
+        });
+        whatsappInput.required   = true;
+        successMsg.style.display = 'block';
+    }
+
+    // --- 6. Form submit ---
+    Wsform.addEventListener('submit',async (e) => {
+        e.preventDefault();
+        successMsg.style.display = "none";
+        Wsbutton.disabled = true;
+        if (whatsappCheckbox.checked) {
+            savedWhatsAppProducts.push(product_id);
+            savedWhatsAppProductsPhones.push({
+                product_id : product_id,
+                phone      : whatsappInput.value.trim()
+            });
+        }
+
+        localStorage.setItem('notifyWhatsAppProducts', JSON.stringify(savedWhatsAppProducts));
+        localStorage.setItem('notifyWhatsAppProductsPhones', JSON.stringify(savedWhatsAppProductsPhones));
+        
+
+        let apiUrl   = "https://whats.line.sa/api/v1/whatsapp-notify-stock-product/salla/"+whatsappln_store_id;
+        let response = await fetch(apiUrl, {
+            method: 'POST', // or 'POST', 'PUT', etc.
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                client_phone: whatsappInput?.value,
+                product_name: document.querySelector('.main-content > h1')?.innerText,
+                product_url: window?.location?.href,
+                product_id: product_id,
+            }),
+        });
+
+        // Handle HTTP errors
+        if (!response.ok) {
+            // Try to read response body for more details
+            const errText = await response.json();
+            console.log('✅ errText:', errText);
+        }
+
+        // Parse JSON
+        await response.json();
+        successMsg.style.display = 'block';
+        Wsbutton.disabled = false;
+    });
 }
 
 
