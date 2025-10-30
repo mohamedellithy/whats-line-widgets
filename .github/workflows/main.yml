@@ -1,0 +1,36 @@
+name: Purge jsDelivr Cache
+
+on:
+  push:
+    branches:
+      - salla
+  release:
+    types: [published]
+
+jobs:
+  purge:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: mohamedellithy/whats-line-widgets@latest
+
+      - name: Purge jsDelivr cache
+        run: |
+          echo "Purging jsDelivr cache for changed files..."
+          # Detect changed files compared to the previous commit
+          CHANGED_FILES=$(git diff --name-only HEAD^ HEAD | grep -E 'dist/.*\.(js|css|json|wasm|map)$' || true)
+          
+          # If no dist files changed, skip purge
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No distribution files changed. Skipping purge."
+            exit 0
+          fi
+
+          # Loop through each changed file and purge it
+          for file in $CHANGED_FILES; do
+            echo "Purging https://cdn.jsdelivr.net/gh/${{ github.repository }}@latest/$file"
+            curl -s -X GET "https://purge.jsdelivr.net/gh/${{ github.repository }}@latest/$file" > /dev/null
+          done
+
+          echo "✅ jsDelivr purge completed."
