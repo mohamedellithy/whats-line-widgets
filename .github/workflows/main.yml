@@ -10,7 +10,6 @@ on:
 jobs:
   purge:
     runs-on: ubuntu-latest
-
     steps:
       - name: Purge jsDelivr cache
         run: |
