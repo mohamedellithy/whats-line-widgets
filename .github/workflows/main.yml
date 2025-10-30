@@ -3,7 +3,7 @@ name: Purge jsDelivr Cache
 on:
   push:
     branches:
-      - salla
+      - zid
   release:
     types: [published]
 
