@@ -1,7 +1,7 @@
 
 async function render_whatsapp_icon() {
     if(whatsappln_icon_status == true){
-        console.log("WhatsAppLn Widget v1.0.7");
+        console.log("WhatsAppLn Widget v1.0.2");
         // Create the <a> element
         const link = document.createElement("a")
         link.href = "#";
@@ -104,10 +104,6 @@ async function render_whatsapp_icon() {
 
     }
 }
-
-// render_whatsapp_icon
-render_whatsapp_icon();
-// render_whatsapp_icon
 
 
 
@@ -251,7 +247,7 @@ async function render_whatsapp_remember_me_on_stock(){
                 if((whatsappln_customer_id != null) && (whatsappln_customer_id != "") && (whatsappln_customer_id != undefined)){
                     whatsappInput.value = whatsappln_customer_mobile;
                     await add_product_on_notify_system(product_id,whatsappln_customer_mobile);
-                    if(savedWhatsAppProducts.indexOf(product_id) == -1){
+                    if(savedWhatsAppProducts?.indexOf(product_id) == -1){
                         savedWhatsAppProducts.push(product_id);
                         localStorage.setItem('notifyWhatsAppProducts', JSON.stringify(savedWhatsAppProducts));
                     }
@@ -266,11 +262,6 @@ async function render_whatsapp_remember_me_on_stock(){
         });
     }
 }
-
-
-// render_whatsapp_remember_me_on_stock
-render_whatsapp_remember_me_on_stock();
-// render_whatsapp_remember_me_on_stock
 
 
 async function add_product_on_notify_system(product_id,whatsappln_customer_mobile){
@@ -299,3 +290,11 @@ async function add_product_on_notify_system(product_id,whatsappln_customer_mobil
     // Parse JSON
     await response.json();
 }
+
+
+
+
+// render_whatsapp_icon
+render_whatsapp_icon();
+// render_whatsapp_remember_me_on_stock
+render_whatsapp_remember_me_on_stock();
