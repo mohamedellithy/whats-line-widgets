@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: mohamedellithy/whats-line-widgets@latest
+        uses: mohamedellithy/whats-line-widgets@v1.0.5
 
       - name: Purge jsDelivr cache
         run: |
