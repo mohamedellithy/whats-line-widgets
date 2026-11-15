@@ -1,4 +1,4 @@
-console.log("WhatsAppLn Widget v1.0.57");
+console.log("WhatsAppLn Widget v1.0.58");
 
 /**
  * Clean phone number helper
