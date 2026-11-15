@@ -1,5 +1,5 @@
 (function () {
-    'use strict'; console.log("WhatsAppLn Widget v1.0.52"); function getGlobal(name, fallback = null) { return (typeof window !== 'undefined' && typeof window[name] !== 'undefined' && window[name] !== null) ? window[name] : fallback }
+    'use strict'; console.log("WhatsAppLn Widget v1.0.53"); function getGlobal(name, fallback = null) { return (typeof window !== 'undefined' && typeof window[name] !== 'undefined' && window[name] !== null) ? window[name] : fallback }
     function cleanPhone(phone) { if (!phone) return ''; return String(phone).replace(/[^\d]/g, '') }
     function isCustomerLoggedIn() { const customerId = getGlobal('whatsappln_customer_id'); if (customerId === null || customerId === undefined) return !1; const str = String(customerId).trim(); return str !== '' && str !== 'null' && str !== 'undefined' && str !== '0' }
     function triggerSallaLogin() {
