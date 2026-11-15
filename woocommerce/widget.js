@@ -1,5 +1,5 @@
 (function () {
-    'use strict'; console.log("WhatsAppLn Widget v1.0.56"); function getVal(name, fallback = null) {
+    'use strict'; console.log("WhatsAppLn Widget v1.0.57"); function getVal(name, fallback = null) {
         try { if (typeof window !== 'undefined' && typeof window[name] !== 'undefined' && window[name] !== null) { return window[name] } } catch (e) { }
         try { const resolver = new Function('try { return ' + name + '; } catch(e) { return undefined; }'); const val = resolver(); if (typeof val !== 'undefined' && val !== null) { return val } } catch (e) { }
         return fallback
